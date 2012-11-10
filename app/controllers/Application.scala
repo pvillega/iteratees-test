@@ -1,30 +1,59 @@
 package controllers
 
 import play.api._
-import libs.json.JsValue
+import libs.{EventSource}
 import play.api.mvc._
-import play.api.Play.current
-import models.WebClient
+import scala.Some
+import services.{ControlActor, StreamManager}
+import services.Config._
 
 /**
  * Main interface for the web page
  */
 object Application extends Controller {
 
-  private lazy val IS_WEB_ENABLED = Play.configuration.getBoolean("enable.webInterface").getOrElse(false)
-
   def index = Action { implicit request =>
     if(IS_WEB_ENABLED) {
-      //Concurrent.hub()
       Ok(views.html.index())
     } else {
       NotFound
     }
   }
 
+  /**
+   * Post request that receives the data to redirect
+   */
+  def receiveData() = Action { implicit request =>
+    request.body.asJson match {
+      case Some(jsValue) =>{
+        val msg = (jsValue \ "data").asOpt[String]
+        Logger.trace("Application.receiveData - Message retrieved [%s]".format(msg))
+        msg match {
+          case Some(s) => {
+            ControlActor.messageToStream(s)
+            Ok
+          }
+          case _ => {
+            Logger.warn("Application.receiveData - Json content missing data element")
+            BadRequest("Json content missing [data] element")
+          }
+        }
+      }
+      case _ => {
+        Logger.warn("Application.receiveData - request received without Json body")
+        BadRequest("Not a Json body in request")
+      }
+    }
+  }
 
-  def readStreamData =  WebSocket.async[JsValue] { request =>
-      WebClient.start(request.remoteAddress)
+  // SSE stream to any client connected
+  def stream = Action { implicit request =>
+
+    implicit val encoder = StreamManager.ENCODER
+    implicit val eventIdExtractor = StreamManager.ID_EXTRACTOR
+    implicit val eventNameExtractor = StreamManager.NAME_EXTRACTOR
+
+    Ok.stream(StreamManager.HUB.getPatchCord &> EventSource()).as("text/event-stream")
   }
   
 }

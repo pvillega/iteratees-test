@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <div class="span12">
-        Below you can see the traffic of the streams in the application, in real time. The traffic is retrieved via WebSockets, if your browser doesn't support them this page won't work.
+        Below you can see the traffic of the streams in the application, in real time. The traffic is retrieved via Server Side Events, if your browser doesn't support them this page won't work.
     </div>
 </div>
 <hr/>
@@ -22,9 +22,52 @@
 
 <script type="text/javascript" charset="utf-8">
 $(function() {
-    var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-    var streamSocket = new WS("@routes.Application.readStreamData.webSocketURL()");
-    streamSocket.onmessage = receiveEvent;
+    if (!!window.EventSource) {
+        feed = new EventSource('@routes.Application.stream');
+
+        // connection was opened
+        feed.addEventListener('open', function (e) {
+            var el = $('<div class="message"><p>Stream open</p></div>')
+            $('#messages').append(el)
+        }, false);
+
+        // receive message
+        feed.addEventListener('message', function(e) {
+            if (e.origin != 'http://localhost:9000') {
+                var el = $('<div class="message"><p>Origin was not http://localhost:9000</p></div>');
+                $('#messages').append(el);
+                feed.close();
+                return;
+            }
+
+            var data = JSON.parse(e.data);
+
+            var el = $('<div class="message"><p></p></div>');
+            $("p", el).text("Message > " + data.text);
+            $('#messages').append(el);
+        }, false);
+
+        // error handling
+        feed.addEventListener('error', function (e) {
+            if (e.eventPhase == EventSource.CLOSED) {
+                var el = $('<div class="message"><p>Connection Closed</p></div>');
+                $('#messages').append(el);
+                feed.close();
+            } else {
+                var el = $('<div class="message"><p></p></div>');
+                $("p", el).text("Unknown error:" + e);
+                $('#messages').append(el);
+            }
+        }, false);
+
+        $(window).unload(function(){
+            console.log("Closing connection");
+            feed.close();
+        });
+
+    } else {
+      $("#messages").html("Serverside Send Event not supported by this browser");
+    }
 })
 </script>
 }

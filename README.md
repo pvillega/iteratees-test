@@ -13,8 +13,7 @@ To test this project you will need:
 
 * Play 2.0.4
 * MongoDB
-* A browser that supports Websockets, like Chrome
-
+* A browser that supports Server Side Events [(SEE)](http://dev.w3.org/html5/eventsource/) like Chrome
 
 ## How to start
 
@@ -32,6 +31,18 @@ Follow these steps to deploy the application:
 The following options change the behaviour of the application:
 
 * **enable.webInterface**: if true, the web interface that displays the stream traffic will be enabled. Otherwise it will return a 404 error.
+* **fakeStream.enable**: if true an actor will generate fake requests every 500ms
+* **fakeStream.server**: the location of the server, used to send the messages via POST when using the fake actor
+
+
+## Why SSE instead of WebSocket?
+
+There are 2 reason for choosing SEE over WebSockets in this test:
+
+* SSE is managed by the browser. That means that the browser takes care of reconnection, etc
+* SSE is unidirectional server-browser. For apps like this sample you don't need the 2-way channel of WebSocket
+
+Also, I already toyed around with WebSockets, so it was less appealing :)
 
 
 ## License

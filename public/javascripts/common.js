@@ -7,22 +7,6 @@ window.$.noConflict();window.$ = window.$.attachReady(jQuery);
 
 /** CUSTOM SCRIPTS HERE */
 
-var receiveEvent = function(event) {
-    var data = JSON.parse(event.data)
-
-    // Create the message element and append
-    var el = $('<div class="message"><p></p></div>')
-    $("p", el).text(data.message)
-    $(el).addClass(data.kind)
-    $('#messages').append(el)
-}
-
-var sendMessage = function() {
-    chatSocket.send(JSON.stringify(
-        {text: $("#talk").val()}
-    ))
-}
-
 
 /** END OF CUSTOM SCRIPTS */
 
