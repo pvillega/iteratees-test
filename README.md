@@ -35,6 +35,15 @@ The following options change the behaviour of the application:
 * **fakeStream.server**: the location of the server, used to send the messages via POST when using the fake actor
 
 
+## To test
+
+You can use AB to test the streams:
+
+    ab -c 100 -n 1000000 -p post -T application/json http://localhost:9000/receive
+
+Create a file *post* with the content of the POST request
+
+
 ## Why SSE instead of WebSocket?
 
 There are 2 reason for choosing SEE over WebSockets in this test:
