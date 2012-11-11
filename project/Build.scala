@@ -12,7 +12,9 @@ object ApplicationBuild extends Build {
       // Add your project dependencies here,
       "com.typesafe.akka" % "akka-testkit" % "2.0" % "test",
       //MongoDB connector
-      "se.radley" %% "play-plugins-salat" % "1.1"
+      "se.radley" %% "play-plugins-salat" % "1.1",
+      //Redis connector
+      "com.typesafe" %% "play-plugins-redis" % "2.0.4"
     )
 
     lazy val s = Defaults.defaultSettings ++ Seq(jacoco.settings:_*)

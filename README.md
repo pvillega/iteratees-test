@@ -12,19 +12,20 @@ The project will simulate receiving data from one source, process the messages a
 To test this project you will need:
 
 * Play 2.0.4
-* MongoDB
-* A browser that supports Server Side Events [(SEE)](http://dev.w3.org/html5/eventsource/) like Chrome
+* MongoDB (optional, connection can be disabled)
+* Redis (optional, connection can be disabled)
+* A browser that supports Server Side Events [(SEE)](http://dev.w3.org/html5/eventsource/) like Chrome (only if you enable the web interface)
 
 ## How to start
 
 Follow these steps to deploy the application:
 
 * Clone this project
-* Set up a [MongoDB](http://www.mongodb.org/) installation and set the DB details in the `application.conf` file
+* (optionally) Set up a [MongoDB](http://www.mongodb.org/) installation and set the DB details in the `application.conf` file
+* (optionally) Set up a [Redis](http://redis.io/) installation and set the DB details in the `application.conf` file
 * Download and install [Play 2.0.4](http://www.playframework.org/download)
 * In the folder of this project run `play start`  (press Control+D to kill the server)
 * If the web interface is available (see configuration below) you can access it via http://localhost:9000/
-
 
 ## Configuration
 
@@ -43,7 +44,6 @@ You can use AB to test the streams:
 
 Create a file *post* with the content of the POST request
 
-
 ## Why SSE instead of WebSocket?
 
 There are 2 reason for choosing SEE over WebSockets in this test:
@@ -51,7 +51,7 @@ There are 2 reason for choosing SEE over WebSockets in this test:
 * SSE is managed by the browser. That means that the browser takes care of reconnection, etc
 * SSE is unidirectional server-browser. For apps like this sample you don't need the 2-way channel of WebSocket
 
-Also, I already toyed around with WebSockets, so it was less appealing :)
+Also, I already tested WebSockets, so it was less appealing :)
 
 ## Tools used
 
@@ -60,6 +60,7 @@ Besides Play 2.0.4, this project uses:
 * [Bootstrap](http://twitter.github.com/bootstrap/) for layout
 * [Modernizr](http://modernizr.com/)
 * [Salat](https://github.com/leon/play-salat) to connect to MongoDB
+* [Play Redis](https://github.com/typesafehub/play-plugins/tree/master/redis) to connect to Redis
 * [JaCoCo](https://bitbucket.org/jmhofer/jacoco4sbt/wiki/Home) to check code coverage
 * [Akka-Testkit](http://doc.akka.io/docs/akka/snapshot/scala/testing.html) to test Akka actors
 
