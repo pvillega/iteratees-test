@@ -13,7 +13,7 @@ To test this project you will need:
 
 * Play 2.0.4
 * MongoDB (optional, connection can be disabled)
-* Redis (optional, connection can be disabled)
+* Redis (optional, connection can be disabled, used as cache)
 * A browser that supports Server Side Events [(SEE)](http://dev.w3.org/html5/eventsource/) like Chrome (only if you enable the web interface)
 
 ## How to start
