@@ -14,7 +14,8 @@ object Config {
 
   lazy val IS_WEB_ENABLED = Play.configuration.getBoolean("enable.webInterface").getOrElse(false)
 
-  lazy val IS_STREAM_ENABLED = Play.configuration.getBoolean("fakeStream.enable").getOrElse(true)
+  lazy val IS_STREAM_ENABLED = Play.configuration.getBoolean("fakeStream.enable").getOrElse(false)
 
   lazy val SERVER_LOCATION = Play.configuration.getString("fakeStream.server").getOrElse("http://localhost:9000/")
+
 }

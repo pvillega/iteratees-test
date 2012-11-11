@@ -53,6 +53,15 @@ There are 2 reason for choosing SEE over WebSockets in this test:
 
 Also, I already toyed around with WebSockets, so it was less appealing :)
 
+## Tools used
+
+Besides Play 2.0.4, this project uses:
+
+* [Bootstrap](http://twitter.github.com/bootstrap/) for layout
+* [Modernizr](http://modernizr.com/)
+* [JaCoCo](https://bitbucket.org/jmhofer/jacoco4sbt/wiki/Home) to check code coverage
+* [Akka-Testkit](http://doc.akka.io/docs/akka/snapshot/scala/testing.html) to test Akka actors
+
 
 ## License
 

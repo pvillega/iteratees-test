@@ -7,6 +7,13 @@ window.$.noConflict();window.$ = window.$.attachReady(jQuery);
 
 /** CUSTOM SCRIPTS HERE */
 
+function getFormattedDate() {
+    var date = new Date();
+    //var str = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    var str =  date.getDate() + "-" + date.getMonth() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
+    return str;
+}
 
 /** END OF CUSTOM SCRIPTS */
 

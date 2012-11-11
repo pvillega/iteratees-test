@@ -1,1 +1,28 @@
 /*Styles file*/
+#messages {
+    border: 3px solid black;
+    height: 500px
+}
+
+.message {
+    border-bottom: 1px dotted grey;
+}
+
+
+/*D3 styles*/
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

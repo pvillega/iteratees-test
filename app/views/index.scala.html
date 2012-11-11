@@ -1,6 +1,10 @@
 @()(implicit request: play.api.mvc.RequestHeader)
 
-@main("Iteratees Test") {
+@moreScripts() = {
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.0.0/jquery.sparkline.min.js"></script>
+}
+
+@main("Iteratees Test", moreScripts) {
 
 <div class="row">
     <div class="span12">
@@ -14,8 +18,13 @@
 </div>
 <hr/>
 <div class="row">
-    <div class="span12">
+    <div class="span6">
         <div id="messages">
+        </div>
+    </div>
+    <div class="span6">
+        <h3>Messages per second</h3>
+        <div id="chart">
         </div>
     </div>
 </div>
@@ -23,13 +32,21 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
     if (!!window.EventSource) {
-        feed = new EventSource('@routes.Application.stream');
+        // Chart values
+        var d3data = [];
+        var oldKey = 0;
+        var value = 0;
+
+        //SSE vars
+        var feed = new EventSource('@routes.Application.stream');
+        var counter = 0;
 
         // connection was opened
         feed.addEventListener('open', function (e) {
             var el = $('<div class="message"><p>Stream open</p></div>')
             $('#messages').append(el)
         }, false);
+
 
         // receive message
         feed.addEventListener('message', function(e) {
@@ -42,10 +59,40 @@ $(function() {
 
             var data = JSON.parse(e.data);
 
+            // Add message to list
             var el = $('<div class="message"><p></p></div>');
-            $("p", el).text("Message > " + data.text);
+            $("p", el).text(counter+") Msg["+getFormattedDate()+"]: " + data.text);
             $('#messages').append(el);
+
+            //Add data to graph
+            var dt = new Date();
+            var key = dt.getSeconds();
+            if(key == oldKey) {
+                value++;
+            } else {
+                oldKey = key;
+                d3data.push(value);
+                value = 1;
+                if (d3data.length > 30) {
+                    d3data.splice(0,1);
+                }
+
+                $("#chart").sparkline(d3data, {
+                    type: 'line',
+                    width: '500',
+                    height: '450',
+                    chartRangeMin: 0,
+                    drawNormalOnTop: false});
+            }
+
+            // Maintain message list
+            counter++;
+            if(counter >= 15){
+                $('#messages').find('.message:first-child').remove();
+            }
+
         }, false);
+
 
         // error handling
         feed.addEventListener('error', function (e) {
@@ -60,6 +107,8 @@ $(function() {
             }
         }, false);
 
+
+        // close feed when leaving window
         $(window).unload(function(){
             console.log("Closing connection");
             feed.close();
@@ -68,6 +117,7 @@ $(function() {
     } else {
       $("#messages").html("Serverside Send Event not supported by this browser");
     }
+
 })
 </script>
 }

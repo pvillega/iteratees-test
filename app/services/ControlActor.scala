@@ -52,6 +52,7 @@ class ControlActor extends Actor {
 }
 
 object ControlActor {
+  private implicit val timeout = Timeout(1, SECONDS)
   private lazy val controlActor = Akka.system.actorOf(Props[ControlActor])
 
   def addClient(name: String, actor: ActorRef) = {
@@ -69,10 +70,16 @@ object ControlActor {
   def stop() = {
     controlActor ! PoisonPill
   }
+
+  def isTerminated() = {
+    controlActor.isTerminated
+  }
+
 }
 
 /** Messages */
 case class MessageToStream(msg: String)
 case class AddClient(name: String, actor: ActorRef)
 case class RemoveClient(name: String)
+
 

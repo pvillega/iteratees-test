@@ -33,9 +33,9 @@ object Global extends GlobalSettings {
 
       Akka.system.scheduler.schedule(
         Duration(500, MILLISECONDS),
-        Duration(500, MILLISECONDS),
+        Duration(50, MILLISECONDS),
         fakeStreamActor,
-        Data("FakeActor Data [text]"))
+        Data("FakeActor Data [This is a sample message]"))
     }
 
     if(IS_WEB_ENABLED) {
