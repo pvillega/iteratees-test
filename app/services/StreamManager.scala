@@ -28,8 +28,8 @@ object StreamManager {
   val messages = Enumerator.imperative[String]()
 
   // Enumeratees to clean the fake requests
-  private val cleanFakeActor : Enumeratee[String, String] = Enumeratee.map[String] { s => if(s.contains("FakeActor")) s.dropWhile( c => c != '[' ) else s }
-  private val cleanBrackets : Enumeratee[String, String] = Enumeratee.map[String] { s => if(s.contains("FakeActor")) s.trim.tail.dropRight(1) else s}
+  private val cleanFakeActor : Enumeratee[String, String] = Enumeratee.map[String] { s => if(s.startsWith("FakeActor")) s.dropWhile( c => c != '[' ) else s }
+  private val cleanBrackets : Enumeratee[String, String] = Enumeratee.map[String] { s => if(s.startsWith("FakeActor")) s.trim.tail.dropRight(1) else s}
 
   // Converts message to Json for the web version
   private val asJson: Enumeratee[String, JsValue] = Enumeratee.map[String] {

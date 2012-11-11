@@ -18,4 +18,5 @@ object Config {
 
   lazy val SERVER_LOCATION = Play.configuration.getString("fakeStream.server").getOrElse("http://localhost:9000/")
 
+  lazy val IS_MONGO_ENABLED = Play.configuration.getBoolean("mongo.stream.enable").getOrElse(false)
 }

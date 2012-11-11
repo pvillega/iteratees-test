@@ -6,7 +6,7 @@ import play.api._
 import libs.concurrent.Akka
 import libs.json.Json._
 import libs.ws.WS
-import services.{StreamManager, ControlActor}
+import services.{MongoDBService, StreamManager, ControlActor}
 import util.Random
 import akka.actor._
 import play.api.Play.current
@@ -24,6 +24,7 @@ object Global extends GlobalSettings {
 
   private lazy val fakeStreamActor = Akka.system.actorOf(Props[FakeStreamActor])
   private val STREAM_ACTOR = "streamWeb"
+  private val MONGODB_ACTOR = "mongoDB"
 
   override def onStart(app: Application) = {
     Logger.info("Global: App starting, setting actors")
@@ -33,7 +34,7 @@ object Global extends GlobalSettings {
 
       Akka.system.scheduler.schedule(
         Duration(500, MILLISECONDS),
-        Duration(50, MILLISECONDS),
+        Duration(500, MILLISECONDS),
         fakeStreamActor,
         Data("FakeActor Data [This is a sample message]"))
     }
@@ -42,6 +43,12 @@ object Global extends GlobalSettings {
       Logger.info("Global: Starting Web Stream (SSE) actor")
 
       ControlActor.addClient(STREAM_ACTOR, StreamManager.streamActor)
+    }
+
+    if(IS_MONGO_ENABLED) {
+      Logger.info("Global: Starting MongoDB actor")
+
+      ControlActor.addClient(MONGODB_ACTOR, MongoDBService.mongoActor)
     }
   }
 
@@ -60,6 +67,13 @@ object Global extends GlobalSettings {
 
       ControlActor.removeClient(STREAM_ACTOR)
       StreamManager.streamActor ! PoisonPill
+    }
+
+    if(IS_MONGO_ENABLED) {
+      Logger.info("Global: Stopping MongoDB actor")
+
+      ControlActor.removeClient(MONGODB_ACTOR)
+      MongoDBService.mongoActor ! PoisonPill
     }
 
     ControlActor.stop()

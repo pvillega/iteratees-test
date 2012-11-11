@@ -33,7 +33,7 @@ The following options change the behaviour of the application:
 * **enable.webInterface**: if true, the web interface that displays the stream traffic will be enabled. Otherwise it will return a 404 error.
 * **fakeStream.enable**: if true an actor will generate fake requests every 500ms
 * **fakeStream.server**: the location of the server, used to send the messages via POST when using the fake actor
-
+* **mongo.stream.enable**: stores messages in Mongo DB (see config for MongoDB connection details)
 
 ## To test
 
@@ -59,6 +59,7 @@ Besides Play 2.0.4, this project uses:
 
 * [Bootstrap](http://twitter.github.com/bootstrap/) for layout
 * [Modernizr](http://modernizr.com/)
+* [Salat](https://github.com/leon/play-salat) to connect to MongoDB
 * [JaCoCo](https://bitbucket.org/jmhofer/jacoco4sbt/wiki/Home) to check code coverage
 * [Akka-Testkit](http://doc.akka.io/docs/akka/snapshot/scala/testing.html) to test Akka actors
 

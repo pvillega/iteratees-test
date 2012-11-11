@@ -10,13 +10,18 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       // Add your project dependencies here,
-      "com.typesafe.akka" % "akka-testkit" % "2.0" % "test"
+      "com.typesafe.akka" % "akka-testkit" % "2.0" % "test",
+      //MongoDB connector
+      "se.radley" %% "play-plugins-salat" % "1.1"
     )
 
     lazy val s = Defaults.defaultSettings ++ Seq(jacoco.settings:_*)
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA, settings = s).settings(
-      // Add your own project settings here
+      // MongoDB Salat
+      routesImport += "se.radley.plugin.salat.Binders._",
+      templatesImport += "org.bson.types.ObjectId",
+      //Jacoco test
       parallelExecution in jacoco.Config := false
 
     )
