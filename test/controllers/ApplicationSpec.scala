@@ -7,6 +7,7 @@ import play.api.libs.json.Json._
 import play.api.test.FakeApplication
 import play.api.libs.json.JsString
 import services.Config
+import play.api.Play
 
 class ApplicationSpec extends Specification {
 
@@ -31,8 +32,6 @@ class ApplicationSpec extends Specification {
         val result = controllers.Application.index()(FakeRequest())
 
         status(result) must equalTo(NOT_FOUND)
-        contentType(result) must beSome("text/html")
-        charset(result) must beSome("utf-8")
       }
     }
 

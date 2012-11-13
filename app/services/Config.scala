@@ -1,7 +1,6 @@
 package services
 
 import play.api.Play
-import play.api.Play.current
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,11 +11,11 @@ import play.api.Play.current
  */
 object Config {
 
-  lazy val IS_WEB_ENABLED = Play.configuration.getBoolean("enable.webInterface").getOrElse(false)
+  def IS_WEB_ENABLED : Boolean = Play.current.configuration.getBoolean("enable.webInterface").getOrElse(false)
 
-  lazy val IS_STREAM_ENABLED = Play.configuration.getBoolean("fakeStream.enable").getOrElse(false)
+  lazy val IS_STREAM_ENABLED = Play.current.configuration.getBoolean("fakeStream.enable").getOrElse(false)
 
-  lazy val SERVER_LOCATION = Play.configuration.getString("fakeStream.server").getOrElse("http://localhost:9000/")
+  lazy val SERVER_LOCATION = Play.current.configuration.getString("fakeStream.server").getOrElse("http://localhost:9000/")
 
-  lazy val IS_MONGO_ENABLED = Play.configuration.getBoolean("mongo.stream.enable").getOrElse(false)
+  lazy val IS_MONGO_ENABLED = Play.current.configuration.getBoolean("mongo.stream.enable").getOrElse(false)
 }
